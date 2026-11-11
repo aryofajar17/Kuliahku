@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="description" content="KuliahKu — pengingat & penampil jadwal kuliah">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="KuliahKu">
+  <title>KuliahKu — Pengingat Jadwal Kuliah</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <div class="header-row">
+        <div class="header-logo">🎓</div>
+        <div>
+          <h1 id="hdr-title">Hari Ini</h1>
+          <p class="sub" id="hdr-sub"></p>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="view active" id="view-home"></section>
+      <section class="view" id="view-jadwal"></section>
+      <section class="view" id="view-tugas"></section>
+      <section class="view" id="view-lainnya"></section>
+    </main>
+
+    <button class="fab" id="fab" aria-label="Tambah">+</button>
+
+    <nav class="bottom-nav">
+      <button data-view="home" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
+        Hari Ini
+      </button>
+      <button data-view="jadwal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3.5"/><path d="M8 3v4M16 3v4M3 10.5h18"/></svg>
+        Jadwal
+      </button>
+      <button data-view="tugas" id="nav-tugas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="m8.5 12.4 2.4 2.4 4.8-5.2"/></svg>
+        Tugas<span class="nav-badge" style="display:none">0</span>
+      </button>
+      <button data-view="lainnya">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2.1"/><circle cx="12" cy="12" r="2.1"/><circle cx="19" cy="12" r="2.1"/></svg>
+        Lainnya
+      </button>
+    </nav>
+  </div>
+
+  <!-- ===== Quick add ===== -->
+  <div class="modal-overlay" id="modal-quickadd">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">Tambah apa?</div>
+      <button class="quick-option" data-action="add-class">
+        <span class="ic" style="background:#eef2ff">📚</span>
+        <span><b>Kelas</b><small>Tambah jadwal kuliah baru</small></span>
+      </button>
+      <button class="quick-option" data-action="add-task">
+        <span class="ic" style="background:#fef3c7">📝</span>
+        <span><b>Tugas</b><small>Catat tugas &amp; deadline pengumpulan</small></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== Form kelas ===== -->
+  <div class="modal-overlay" id="modal-class">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title" id="class-modal-title">Tambah Kelas</div>
+      <form id="form-class" autocomplete="off">
+        <div class="field">
+          <label>Matkul <span class="req">*</span></label>
+          <input name="name" placeholder="cth: Basis Data" maxlength="60">
+        </div>
+        <div class="field">
+          <label>Hari <span class="req">*</span></label>
+          <select name="day">
+            <option value="0">Senin</option><option value="1">Selasa</option>
+            <option value="2">Rabu</option><option value="3">Kamis</option>
+            <option value="4">Jumat</option><option value="5">Sabtu</option>
+            <option value="6">Minggu</option>
+          </select>
+        </div>
+        <div class="row-2">
+          <div class="field"><label>Jam Mulai <span class="req">*</span></label><input type="time" name="start" required></div>
+          <div class="field"><label>Jam Selesai <span class="req">*</span></label><input type="time" name="end" required></div>
+        </div>
+        <div class="field"><label>Ruangan</label><input name="room" placeholder="cth: R. 2.1 / Lab Komputer" maxlength="40"></div>
+        <div class="field"><label>Dosen</label><input name="lecturer" placeholder="cth: Bpk. Andi, M.Kom" maxlength="50"></div>
+        <div class="field"><label>Warna</label><div class="swatches" id="swatches"></div></div>
+        <div class="form-actions">
+          <button type="button" class="btn outline" data-action="close">Batal</button>
+          <button type="submit" class="btn primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Form tugas ===== -->
+  <div class="modal-overlay" id="modal-task">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title" id="task-modal-title">Tambah Tugas</div>
+      <form id="form-task" autocomplete="off">
+        <div class="field">
+          <label>Judul Tugas <span class="req">*</span></label>
+          <input name="title" placeholder="cth: Resume Bab 2" maxlength="80">
+        </div>
+        <div class="field">
+          <label>Matkul</label>
+          <select name="courseId"></select>
+        </div>
+        <div class="row-2">
+          <div class="field"><label>Tenggat <span class="req">*</span></label><input type="date" name="dueDate" required></div>
+          <div class="field"><label>Jam</label><input type="time" name="dueTime"></div>
+        </div>
+        <div class="field">
+          <label>Catatan</label>
+          <textarea name="notes" placeholder="Detail tugas, link kumpul, dsb. (opsional)" maxlength="300"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn outline" data-action="close">Batal</button>
+          <button type="submit" class="btn primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Detail (kelas/tugas) ===== -->
+  <div class="modal-overlay" id="modal-detail">
+    <div class="sheet"><div class="sheet-handle"></div><div id="detail-body"></div></div>
+  </div>
+
+  <!-- ===== Pratinjau import ===== -->
+  <div class="modal-overlay" id="modal-import">
+    <div class="sheet"><div class="sheet-handle"></div><div id="import-body"></div></div>
+  </div>
+
+  <!-- ===== Info umum ===== -->
+  <div class="modal-overlay" id="modal-info">
+    <div class="sheet"><div class="sheet-handle"></div><div class="sheet-title" id="info-title"></div><div id="info-body"></div></div>
+  </div>
+
+  <!-- ===== Konfirmasi ===== -->
+  <div class="modal-overlay" id="modal-confirm">
+    <div class="sheet" style="padding-bottom:calc(24px + env(safe-area-inset-bottom))">
+      <div class="sheet-handle"></div>
+      <p id="confirm-msg" style="font-size:15px;font-weight:600;line-height:1.5;padding:0 4px"></p>
+      <div class="sheet-actions cols" style="margin-top:20px">
+        <button class="btn outline" data-action="confirm-cancel">Batal</button>
+        <button class="btn danger" id="confirm-ok" data-action="confirm-ok">Ya</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="file-import" accept=".csv,.xlsx,.xls,text/csv" hidden>
+  <input type="file" id="file-restore" accept=".json,application/json" hidden>
+  <div class="toast" id="toast"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/notify.js"></script>
+  <script src="js/importer.js"></script>
+  <script src="js/views.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

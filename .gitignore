@@ -1,0 +1,10 @@
+# Dependensi (jika ada)
+node_modules/
+
+# File sistem & editor
+Thumbs.db
+.DS_Store
+*.log
+
+# Data lokal (tidak perlu ikut repo)
+gui-test-screenshots/
